@@ -78,15 +78,6 @@ export interface IFileService {
 	readonly onDidFilesChange: Event<FileChangesEvent>;
 
 	/**
-	 *
-	 * Raw access to all file events emitted from file system providers.
-	 *
-	 * @deprecated use this method only if you know what you are doing. use the other watch related events
-	 * and APIs for more efficient file watching.
-	 */
-	readonly onDidChangeFilesRaw: Event<IRawFileChangesEvent>;
-
-	/**
 	 * An event that is fired upon successful completion of a certain file operation.
 	 */
 	readonly onDidRunOperation: Event<FileOperationEvent>;
@@ -648,21 +639,23 @@ export interface IFileChange {
 	readonly resource: URI;
 }
 
-export interface IRawFileChangesEvent {
+export class FileChangesEvent {
 
 	/**
-	 * @deprecated use `FileChangesEvent` instead unless you know what you are doing
+	 * @deprecated use the `contains()` or `affects` method to efficiently find
+	 * out if the event relates to a given resource. these methods ensure:
+	 * - that there is no expensive lookup needed (by using a `TernarySearchTree`)
+	 * - correctly handles `FileChangeType.DELETED` events
 	 */
 	readonly changes: readonly IFileChange[];
-}
-
-export class FileChangesEvent {
 
 	private readonly added: TernarySearchTree<URI, IFileChange> | undefined = undefined;
 	private readonly updated: TernarySearchTree<URI, IFileChange> | undefined = undefined;
 	private readonly deleted: TernarySearchTree<URI, IFileChange> | undefined = undefined;
 
 	constructor(changes: readonly IFileChange[], ignorePathCasing: boolean) {
+		this.changes = changes;
+
 		for (const change of changes) {
 			switch (change.type) {
 				case FileChangeType.ADDED:

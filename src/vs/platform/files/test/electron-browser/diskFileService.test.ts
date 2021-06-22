@@ -2283,7 +2283,7 @@ flakySuite('Disk File Service', function () {
 				return raw.map(change => `Change: type ${toString(change.type)} path ${change.resource.toString()}`).join('\n');
 			}
 
-			const listenerDisposable = service.onDidChangeFilesRaw(({ changes }) => {
+			const listenerDisposable = service.onDidFilesChange(({ changes }) => {
 				watcherDisposable.dispose();
 				listenerDisposable.dispose();
 
