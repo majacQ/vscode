@@ -480,7 +480,7 @@
     "@emmetio/css-parser": "ramya-rao-a/css-parser#vscode",
     "@emmetio/html-matcher": "^0.3.3",
     "@emmetio/math-expression": "^1.0.4",
-    "@vscode/emmet-helper": "^2.3.0",
+    "@vscode/emmet-helper": "^2.8.3",
     "image-size": "^0.5.2",
     "vscode-languageserver-textdocument": "^1.0.1"
   },
